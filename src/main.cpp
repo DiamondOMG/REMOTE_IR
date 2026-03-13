@@ -15,8 +15,16 @@ void setup() {
     button_init();
     init_ir();
     
+    // Pre-load NEC signal for testing IR Send (Button 16)
+    temp_ir_data.valid = 1;
+    temp_ir_data.protocol = 8; // NEC protocol index from IRProtocol.h
+    temp_ir_data.address = 0x56;
+    temp_ir_data.command = 0x0;
+    temp_ir_data.numberOfBits = 32;
+    temp_ir_data.flags = 0x0;
+
     Serial.println("All Modules Initialized.");
-    Serial.println("Point your remote at the receiver to learn.");
+    Serial.println("Ready to test IR Send: Press Button 16 to fire NEC 0x56:0x0");
 }
 
 void loop() {
