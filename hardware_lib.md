@@ -18,19 +18,33 @@
 | **USB** | PA11 (D-), PA12 (D+) | **Yes** | USB Full Speed |
 | **LED** | PC13 | No | Built-in LED (Active LOW) |
 
-### ⚙️ Hardware Limits (F103X6)
-- **Flash:** 32 KB
-- **RAM:** 10 KB
-- **Timers:** 3x General Purpose (TIM2, TIM3, TIM4) + 1x Advanced (TIM1)
-- **DMA:** 7 Channels (ช่วยลดภาระ CPU ในการย้ายข้อมูล)
+### 🛠️ External Hardware Components
+1. **Button Matrix 4x4**: 16 tactile buttons for control and data mapping.
+2. **LEDs (5 Colors)**:
+   - Red (🔴), Yellow (🟡), Green (🟢), Blue (🔵), White (⚪)
+   - Used for Profile binary display and Status signals.
+3. **IR Send**: High-power IR LED (typically driven via transistor).
+4. **IR Receive**: IR Receiver module (e.g., TSOP series) for learning signals.
+5. **Power Module**: 
+   - Battery Holder (1.5V)
+   - Boost Converter (Step-up to 5V) for stable operation.
+
+### 📚 Libraries Used
+| Library Name | Version | Purpose |
+|---|---|---|
+| **IRremote** | ^4.3.1 | Core IR send/receive logic |
+| **Keypad** | (TBD) | Handling 4x4 Matrix scanning |
+| **EEPROM (Emulated)** | Built-in | Saving IR profiles to Flash |
 
 ### ⚙️ Recommended PlatformIO Config
 ```ini
 platform = ststm32
 board = bluepill_f103c6
 framework = arduino
-upload_protocol = serial
+upload_protocol = stlink
 monitor_speed = 115200
+lib_deps =
+    z3t0/IRremote@^4.3.1
 ```
 
 ### ⚠️ Common Hardware Issues / Tips
@@ -38,6 +52,6 @@ monitor_speed = 115200
     1. ปรับ Jumper: **Boot0 = 1, Boot1 = 0**
     2. **กดปุ่ม Reset** บนบอร์ด (เพื่อเข้าสู่ Bootloader Mode)
     3. จึงจะเริ่มสั่ง Flash โค้ดได้
-- **After Flash:** หากต้องการให้โค้ดรันอัตโนมัติหลัง Reset ครั้งถัดไป ต้องปรับ **Boot0 = 0**
+- **Flash Protection:** ชิป C6 มี Flash น้อย (32KB) ควรระวังขนาดของ IR buffer หากใช้โหมด RAW
 - **Wait for Serial:** เมื่อใช้ `pio run -t upload -t monitor` ควรใส่ `delay(6000)` ใน `setup()` เสมอ
 - **ADC Warning:** ห้ามจ่ายไฟเกิน 3.3V เข้าขา ADC เด็ดขาด (ขาเหล่านี้ไม่ 5V-Tolerant)
