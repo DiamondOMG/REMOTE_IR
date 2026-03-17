@@ -12,6 +12,7 @@ void setup() {
 
     // Initialize Modules
     led_init();
+    test_order_led(); // Startup LED sequence
     button_init();
     init_ir();
     
@@ -34,10 +35,10 @@ void loop() {
         Serial.println(">>> IR SIGNAL RECEIVED <<<");
         ir_print_data(temp_ir_data);
         
-        // Blink Green LED to indicate reception
-        digitalWrite(PA4, HIGH);
-        delay(100);
-        digitalWrite(PA4, LOW);
+        ir_print_data(temp_ir_data);
+        
+        // Blink Green LED via led_module define if needed, 
+        // or just leave it for now to avoid pin conflict.
     }
 
     // 2. Check Button Matrix
@@ -51,19 +52,11 @@ void loop() {
             if (temp_ir_data.valid) {
                 Serial.println("Testing Send (Button 16)...");
                 ir_send_frame(temp_ir_data);
-                
-                // Blink Blue LED for Send
-                digitalWrite(PA6, HIGH);
-                delay(100);
-                digitalWrite(PA6, LOW);
             } else {
                 Serial.println("No valid IR data to send!");
             }
         } else {
-            // Visual feedback for other buttons
-            digitalWrite(PA0, HIGH); 
-            delay(50);
-            digitalWrite(PA0, LOW);
+            // Visual feedback removed as requested
         }
     }
 }

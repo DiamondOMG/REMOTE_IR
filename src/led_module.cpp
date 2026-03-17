@@ -21,14 +21,14 @@ void test_order_led() {
     // Forward sequence
     for (uint8_t i = 0; i < NUM_LEDS; i++) {
         digitalWrite(LED_PINS[i], HIGH);
-        delay(100);
+        delay(250);
         digitalWrite(LED_PINS[i], LOW);
     }
     
     // Backward sequence
     for (int8_t i = NUM_LEDS - 2; i >= 1; i--) {
         digitalWrite(LED_PINS[i], HIGH);
-        delay(100);
+        delay(250);
         digitalWrite(LED_PINS[i], LOW);
     }
 }
