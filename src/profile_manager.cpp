@@ -16,7 +16,7 @@ static int8_t current_map_index = 0; // 0 to 30 (mapping to 31 profiles)
 static const uint8_t TOTAL_PROFILES = 31;
 
 void profile_init() {
-    current_map_index = 0; // Start at first profile (Red)
+    current_map_index = storage_load_last_profile(); // Restore last profile
     set_profile_led(PROFILE_MAP[current_map_index]);
     storage_load_profile(current_map_index + 1); // Load from Flash
     Serial.print(F("Profile Initialized: "));
@@ -33,6 +33,7 @@ void profile_up() {
     }
     set_profile_led(PROFILE_MAP[current_map_index]);
     storage_load_profile(current_map_index + 1); // Load new profile from Flash
+    storage_save_last_profile(current_map_index); // Remember last profile
     Serial.print(F("Profile UP -> "));
     Serial.println(current_map_index + 1);
 }
@@ -44,6 +45,7 @@ void profile_down() {
     }
     set_profile_led(PROFILE_MAP[current_map_index]);
     storage_load_profile(current_map_index + 1); // Load new profile from Flash
+    storage_save_last_profile(current_map_index); // Remember last profile
     Serial.print(F("Profile DOWN -> "));
     Serial.println(current_map_index + 1);
 }

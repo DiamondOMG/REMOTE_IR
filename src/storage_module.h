@@ -48,3 +48,15 @@ void storage_load_profile(uint8_t profile_id);
  * @param profile_id 1-31
  */
 void storage_save_profile(uint8_t profile_id);
+
+/**
+ * @brief Save the last active profile index to Flash
+ * @param map_index 0-30
+ */
+void storage_save_last_profile(uint8_t map_index);
+
+/**
+ * @brief Load the last active profile index from Flash
+ * @return int8_t 0-30, or 0 if not set
+ */
+int8_t storage_load_last_profile();

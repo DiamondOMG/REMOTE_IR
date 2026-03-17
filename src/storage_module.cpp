@@ -88,3 +88,18 @@ void storage_clear_profile() {
     }
     Serial.println(F("Profile storage cleared"));
 }
+
+// Address 2976 = after all 31 profiles (31 * 96)
+#define LAST_PROFILE_ADDR 2976
+
+void storage_save_last_profile(uint8_t map_index) {
+    EEPROM.put(LAST_PROFILE_ADDR, map_index);
+    eeprom_buffer_flush();
+}
+
+int8_t storage_load_last_profile() {
+    uint8_t val;
+    EEPROM.get(LAST_PROFILE_ADDR, val);
+    if (val >= 31 || val == 0xFF) return 0; // Default to first profile
+    return (int8_t)val;
+}
