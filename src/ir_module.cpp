@@ -23,6 +23,10 @@ static IRData toIRData(const LearnedIRData &data, bool repeatOnly) {
 void init_ir() {
     Serial.println(F("START : init_ir (Send & Receive)"));
 
+    // Set pin to INPUT_PULLUP to prevent ghost triggers from electrical noise 
+    // when no IR receiver is physically connected.
+    pinMode(IR_RECEIVE_PIN, INPUT_PULLUP);
+
     IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
     IrSender.begin();
 

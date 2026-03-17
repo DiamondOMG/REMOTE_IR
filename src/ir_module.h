@@ -5,7 +5,7 @@
 // Use TIM1 for IR send timing on STM32F103.
 #define STM32_TIMER_NUMBER 1
 
-#define IR_RECEIVE_PIN PC14
+#define IR_RECEIVE_PIN PA11
 #define IR_SEND_PIN PA8
 
 struct LearnedIRData {

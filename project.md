@@ -32,7 +32,7 @@
 | Device | Pin | Function | Description |
 |---|---|---|---|
 | IR Send | PA8 | PWM/Output | ขาส่งสัญญาณ IR (TIM1) |
-| IR Recv | PC14 | Input | ขารับสัญญาณ IR |
+| IR Recv | PA11 | Input | ขารับสัญญาณ IR |
 | LED Red | PA0 | Output | |
 | LED Yellow | PA2 | Output | |
 | LED Green | PA4 | Output | |
@@ -42,7 +42,8 @@
 | Matrix Col 1-4 | PB6, PB7, PB8, PB9 | Output | Columns |
 
 ## ⚙️ 4. Config & Settings
-- **Baud Rate**: 115200
+- **Upload Protocol**: UART Serial (USART1: PA9, PA10)
+- **Baud Rate**: 115200 (Monitor & Upload)
 - **Profiles**: 31 Profiles (5-bit binary display via LEDs)
 - **System Buttons (Locked)**: 
     - ปุ่ม 4: สลับโหมด (Learn/Send)
