@@ -82,6 +82,9 @@ bool ir_send_frame(const LearnedIRData &data) {
         return false;
     }
 
+    Serial.println(F(">>> SENDING IR SIGNAL <<<"));
+    ir_print_data(data);
+
     IRData sendData = toIRData(data, false);
     return IrSender.write(&sendData, 0) > 0;
 }
