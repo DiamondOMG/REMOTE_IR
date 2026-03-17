@@ -2,6 +2,7 @@
 #include "led_module.h"
 #include "button_module.h"
 #include "ir_module.h"
+#include "profile_manager.h"
 
 LearnedIRData temp_ir_data;
 
@@ -13,6 +14,7 @@ void setup() {
     // Initialize Modules
     led_init();
     test_order_led(); // Startup LED sequence
+    profile_init();   // Start at Profile 0
     button_init();
     init_ir();
     
@@ -25,7 +27,6 @@ void setup() {
     temp_ir_data.flags = 0x0;
 
     Serial.println("All Modules Initialized.");
-    Serial.println("Ready to test IR Send: Press Button 16 to fire NEC 0x56:0x0");
 }
 
 void loop() {
@@ -42,16 +43,27 @@ void loop() {
         Serial.print("Button Pressed: ");
         Serial.println(btn);
         
-        // If button 16 is pressed, try to send the last learned signal
-        if (btn == 16) {
-            if (temp_ir_data.valid) {
-                Serial.println("Testing Send (Button 16)...");
-                ir_send_frame(temp_ir_data);
-            } else {
-                Serial.println("No valid IR data to send!");
-            }
-        } else {
-            // Visual feedback removed as requested
+        switch(btn) {
+            case 8: // Profile DOWN (แดง -> เหลือง -> เขียว ...)
+                profile_down();
+                break;
+            
+            case 12: // Profile UP (เขียว -> เหลือง -> แดง ...)
+                profile_up();
+                break;
+
+            case 16: // Test Send
+                if (temp_ir_data.valid) {
+                    Serial.println("Testing Send (Button 16)...");
+                    ir_send_frame(temp_ir_data);
+                } else {
+                    Serial.println("No valid IR data to send!");
+                }
+                break;
+
+            default:
+                // Visual feedback removed for other buttons
+                break;
         }
     }
 }
