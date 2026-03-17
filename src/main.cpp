@@ -34,11 +34,6 @@ void loop() {
         Serial.println();
         Serial.println(">>> IR SIGNAL RECEIVED <<<");
         ir_print_data(temp_ir_data);
-        
-        ir_print_data(temp_ir_data);
-        
-        // Blink Green LED via led_module define if needed, 
-        // or just leave it for now to avoid pin conflict.
     }
 
     // 2. Check Button Matrix
