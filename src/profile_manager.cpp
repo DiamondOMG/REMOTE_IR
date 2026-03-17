@@ -47,3 +47,7 @@ void profile_down() {
 uint8_t get_current_profile() {
     return current_map_index + 1; // Return 1-31 for user/storage
 }
+
+uint8_t get_current_profile_mask() {
+    return PROFILE_MAP[current_map_index];
+}
