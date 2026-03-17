@@ -9,13 +9,13 @@
 #define IR_SEND_PIN PA8
 
 struct LearnedIRData {
-    uint8_t valid;
-    uint8_t protocol;
-    uint16_t address;
-    uint16_t command;
-    uint16_t numberOfBits;
-    uint8_t flags;
-};
+    uint16_t address;      // 2 bytes
+    uint16_t command;      // 2 bytes
+    uint8_t protocol;      // 1 byte
+    uint8_t numberOfBits;  // 1 byte
+    uint8_t flags;         // 1 byte
+    uint8_t valid;         // 1 byte
+}; // Total: 8 bytes
 
 void init_ir();
 

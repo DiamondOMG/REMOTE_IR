@@ -1,6 +1,7 @@
 #include "learn_mode.h"
 #include "led_module.h"
 #include "profile_manager.h"
+#include "storage_module.h"
 
 // System buttons (not assignable)
 static const int SYSTEM_BUTTONS[] = {4, 8, 12, 16};
@@ -89,12 +90,22 @@ void learn_store_signal(const LearnedIRData &data) {
 void learn_assign_button(int btn) {
     if (!learn_buffer.valid) return;
 
-    // TODO: Later save to Flash/EEPROM using profile index + button number
+    int8_t slot = button_to_slot(btn);
+    if (slot < 0) return;
+
+    // Save to storage (RAM)
+    storage_save(slot, learn_buffer);
+    
+    // Write all slots of current profile to Flash
+    storage_save_profile(get_current_profile());
+
     Serial.print(F(">>> ASSIGNED to Profile "));
     Serial.print(get_current_profile());
     Serial.print(F(", Button "));
     Serial.print(btn);
-    Serial.println(F(" <<<"));
+    Serial.print(F(" (Slot "));
+    Serial.print(slot);
+    Serial.println(F(") <<<"));
     ir_print_data(learn_buffer);
 
     // Clear buffer and go back to waiting

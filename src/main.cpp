@@ -4,6 +4,7 @@
 #include "ir_module.h"
 #include "profile_manager.h"
 #include "learn_mode.h"
+#include "storage_module.h"
 
 LearnedIRData temp_ir_data;
 
@@ -15,10 +16,11 @@ void setup() {
     // Initialize Modules
     led_init();
     test_order_led(); // Startup LED sequence
-    profile_init();   // Start at Profile 1 (Red)
     button_init();
     init_ir();
+    storage_init();   // Load Flash data FIRST
     learn_mode_init();
+    profile_init();   // Then load Profile 1 from Flash cache
 
     Serial.println("All Modules Initialized.");
     Serial.println("Mode: SEND | S4=Learn | S8=Down | S12=Up | S16=TestSend");
@@ -64,11 +66,7 @@ void loop() {
                 if (mode == MODE_SEND) profile_up();
                 return;
 
-            case 16: // Test Send (send mode only)
-                if (mode == MODE_SEND && temp_ir_data.valid) {
-                    Serial.println("Testing Send (Button 16)...");
-                    ir_send_frame(temp_ir_data);
-                }
+            case 16: // Reserved (future use)
                 return;
         }
 
@@ -78,10 +76,21 @@ void loop() {
                 // Assign the learned signal to this button
                 learn_assign_button(btn);
             } else if (mode == MODE_SEND) {
-                // TODO: Send stored IR signal for this profile+button
-                Serial.print("Send button ");
-                Serial.print(btn);
-                Serial.println(" (no data stored yet)");
+                // Send stored IR signal from storage
+                int8_t slot = button_to_slot(btn);
+                if (slot >= 0) {
+                    LearnedIRData send_data;
+                    if (storage_load(slot, &send_data)) {
+                        Serial.print("Sending slot ");
+                        Serial.print(slot);
+                        Serial.println("...");
+                        ir_send_frame(send_data);
+                    } else {
+                        Serial.print("Slot ");
+                        Serial.print(slot);
+                        Serial.println(" is empty");
+                    }
+                }
             }
         }
     }

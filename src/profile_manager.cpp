@@ -1,5 +1,6 @@
 #include "profile_manager.h"
 #include "led_module.h"
+#include "storage_module.h"
 
 // Mapping profiles to bitmasks (1-31) based on user's intuitive order:
 // Singles, then Pairs, then Triples, then Quads, then All.
@@ -17,6 +18,7 @@ static const uint8_t TOTAL_PROFILES = 31;
 void profile_init() {
     current_map_index = 0; // Start at first profile (Red)
     set_profile_led(PROFILE_MAP[current_map_index]);
+    storage_load_profile(current_map_index + 1); // Load from Flash
     Serial.print(F("Profile Initialized: "));
     Serial.print(current_map_index + 1);
     Serial.print(F(" (Mask: "));
@@ -30,6 +32,7 @@ void profile_up() {
         current_map_index = 0; // Wrap to first
     }
     set_profile_led(PROFILE_MAP[current_map_index]);
+    storage_load_profile(current_map_index + 1); // Load new profile from Flash
     Serial.print(F("Profile UP -> "));
     Serial.println(current_map_index + 1);
 }
@@ -40,6 +43,7 @@ void profile_down() {
         current_map_index = TOTAL_PROFILES - 1; // Wrap to last
     }
     set_profile_led(PROFILE_MAP[current_map_index]);
+    storage_load_profile(current_map_index + 1); // Load new profile from Flash
     Serial.print(F("Profile DOWN -> "));
     Serial.println(current_map_index + 1);
 }
