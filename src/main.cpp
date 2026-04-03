@@ -5,6 +5,7 @@
 #include "profile_manager.h"
 #include "learn_mode.h"
 #include "storage_module.h"
+#include "sweep_mode.h"
 
 LearnedIRData temp_ir_data;
 
@@ -21,6 +22,7 @@ void setup() {
     storage_init();   // Load Flash data FIRST
     learn_mode_init();
     profile_init();   // Then load Profile 1 from Flash cache
+    sweep_mode_init();
 
     Serial.println("All Modules Initialized.");
     Serial.println("Mode: SEND | S4=Learn | S8=Down | S12=Up | S16=TestSend");
@@ -52,22 +54,39 @@ void loop() {
         Serial.print("Button Pressed: ");
         Serial.println(btn);
 
-        // System button handling (works in all modes)
+        // System button handling
         switch(btn) {
-            case 4: // Toggle Learn Mode
-                toggle_learn_mode();
+            case 4: // S4: Toggle Learn Mode or switch protocol in Sweep Mode
+                if (mode == MODE_SWEEP) {
+                    sweep_mode_handle_button(btn);
+                } else {
+                    toggle_learn_mode();
+                }
                 return;
 
-            case 8: // Profile DOWN (แดง -> เหลือง -> เขียว ...)
+            case 8: // Profile DOWN
                 if (mode == MODE_SEND) profile_down();
+                else if (mode == MODE_SWEEP) sweep_mode_handle_button(btn);
                 return;
             
-            case 12: // Profile UP (เขียว -> เหลือง -> แดง ...)
+            case 12: // Profile UP
                 if (mode == MODE_SEND) profile_up();
+                else if (mode == MODE_SWEEP) sweep_mode_handle_button(btn);
                 return;
 
-            case 16: // Reserved (future use)
+            case 16: // S16: Test Send or Sweep Mode trigger
+                if (mode == MODE_SEND) {
+                    sweep_mode_enter();
+                } else if (mode == MODE_SWEEP) {
+                    sweep_mode_handle_button(btn);
+                }
                 return;
+        }
+
+        if (mode == MODE_SWEEP) {
+            // Hand off all other buttons to Sweep mode logic
+            sweep_mode_handle_button(btn);
+            return;
         }
 
         // Data button handling (1-3, 5-7, 9-11, 13-15)

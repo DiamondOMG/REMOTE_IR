@@ -33,8 +33,15 @@ bool is_data_button(int btn) {
     return (btn >= 1 && btn <= 16);
 }
 
+void set_system_mode(SystemMode mode) {
+    current_mode = mode;
+    if (mode == MODE_SEND) {
+        set_profile_led(get_current_profile_mask());
+    }
+}
+
 void toggle_learn_mode() {
-    if (current_mode == MODE_SEND) {
+    if (current_mode == MODE_SEND || current_mode == MODE_SWEEP) {
         // Enter Learn Mode
         current_mode = MODE_LEARN_WAITING;
         learn_buffer.valid = 0;
@@ -56,7 +63,7 @@ void learn_mode_update() {
     if (current_mode == MODE_SEND) return;
 
     unsigned long now = millis();
-    unsigned long interval = (current_mode == MODE_LEARN_WAITING) 
+    unsigned long interval = (current_mode == MODE_LEARN_WAITING || current_mode == MODE_SWEEP) 
                               ? SLOW_BLINK_INTERVAL 
                               : FAST_BLINK_INTERVAL;
 

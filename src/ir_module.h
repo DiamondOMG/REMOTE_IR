@@ -31,3 +31,6 @@ bool ir_send_frame(const LearnedIRData &data);
 bool ir_send_repeat(const LearnedIRData &data);
 
 void ir_print_data(const LearnedIRData &data);
+
+// Debug helper to print protocol numbers and names
+void ir_print_all_protocols();

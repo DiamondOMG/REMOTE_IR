@@ -123,3 +123,15 @@ void ir_print_data(const LearnedIRData &data) {
     Serial.print(F("Flags: 0x"));
     Serial.println(data.flags, HEX);
 }
+
+void ir_print_all_protocols() {
+    Serial.println(F("\n--- DUMPING PROTOCOL IDs ---"));
+    // IRremote decode_type_t generally goes up to ~30 or so.
+    for (int i = 0; i <= 30; i++) {
+        Serial.print(F("ID "));
+        Serial.print(i);
+        Serial.print(F(" = "));
+        Serial.println(getProtocolString(static_cast<decode_type_t>(i)));
+    }
+    Serial.println(F("----------------------------\n"));
+}

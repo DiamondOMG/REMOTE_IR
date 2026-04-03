@@ -6,7 +6,8 @@
 enum SystemMode {
     MODE_SEND,           // Normal: press 1-12 buttons to send IR
     MODE_LEARN_WAITING,  // Learn: waiting for IR signal (slow blink)
-    MODE_LEARN_RECEIVED  // Learn: IR received, waiting for button assign (fast blink)
+    MODE_LEARN_RECEIVED, // Learn: IR received, waiting for button assign (fast blink)
+    MODE_SWEEP           // Sweep: Hunting for signal
 };
 
 /**
@@ -23,6 +24,11 @@ SystemMode get_current_mode();
  * @brief Toggle learn mode on/off (called when S4 is pressed)
  */
 void toggle_learn_mode();
+
+/**
+ * @brief Set the system mode directly
+ */
+void set_system_mode(SystemMode mode);
 
 /**
  * @brief Must be called every loop() for non-blocking LED blink
