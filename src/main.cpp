@@ -9,7 +9,7 @@
 LearnedIRData temp_ir_data;
 
 void setup() {
-    delay(6000);
+    delay(100);
     Serial.begin(115200);
     Serial.println("System starting...");
 
